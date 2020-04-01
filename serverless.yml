@@ -1,0 +1,17 @@
+
+service: dynamodb-replica-data
+
+plugins:
+  - serverless-python-requirements
+custom:
+  pythonRequirements:
+    dockerizePip: true
+
+provider:
+  name: aws
+  runtime: python3.7
+  timeout: 180
+
+functions:
+  handler:
+    handler: handler.handler

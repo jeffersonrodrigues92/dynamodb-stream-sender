@@ -1,0 +1,124 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Replicate Data Between Accounts
+
+Parameters:
+
+  HandlerParameter:
+    Type: String
+    Description: Name de Handler this function
+
+  FunctionName:
+    Type: String
+    Description: Name this function.
+
+  Runtime:
+    Type: String
+    Description: Version this java running in function
+
+  Timeout:
+    Type: String
+    Description: Time for timeout in seconds
+
+  MemorySize:
+    Type: Number
+    Description: Size the memory for function
+
+  SecGroup:
+    Type: String
+
+  Versao:
+    Type: String
+
+  Product:
+    Type: String
+    Default: "rich-richie"
+
+  Env:
+    Type: String
+
+  AccountReplica:
+    Type: String
+  
+  MessageRetentionPeriod:
+    Type: String
+  
+  VisibilityTimeout:
+    Type: String
+
+Resources:
+
+  dynamoDBReplicaData:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: !Ref HandlerParameter
+      FunctionName: !Ref FunctionName
+      Runtime: !Ref Runtime
+      Timeout: !Ref Timeout
+      MemorySize: !Ref MemorySize
+      Role: !Sub arn:aws:iam::${AWS::AccountId}:role/LambdaExecutionRole
+      Policies: AWSLambdaBasicExecutionRole
+      CodeUri: ../../.serverless/dynamodb-replica-data.zip
+
+
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref SecGroup
+        SubnetIds:
+          - !ImportValue vpc-subnetPrvA
+      Environment:
+        Variables:
+          REGION: !Sub ${AWS::Region}
+          ACCOUNT_REPLICA: !Ref AccountReplica
+          
+      Tags:
+        env : !Ref Env
+        service : dynamodb-replica-data
+        stack : !Sub ${AWS::StackName}
+        squad : squad-cloud
+        slack : squad-cloud
+        email : cloud
+        resource : lambda
+
+  queueReplicaDataDeadLetter:    
+    Type: AWS::SQS::Queue
+      Properties: 
+        MessageRetentionPeriod: !Ref MessageRetentionPeriod 
+        QueueName: queueReplicaDataDeadLetter
+        Tags: 
+        - 
+          Key: "env"
+          Value: !Ref Env
+        - 
+          Key: "service"
+          Value: "dynamodb-replica-data"
+        - 
+          Key: "stack"
+          Value: !Sub ${AWS::StackName}
+        - 
+          Key: "squad"
+          Value: "squad-cloud"
+        - 
+          Key: "slack"
+          Value: "squad-cloud"
+        - 
+          Key: "email"
+          Value: "cloud"
+        - 
+          Key: "resource"
+          Value: "sqs"
+
+        VisibilityTimeout: !Ref VisibilityTimeout
+
+Outputs:
+  queueReplicaDataDeadLetter:
+    Description: Export to Arn SQS Queue queueDynamoDbReplicaDataDeadLetter
+    Value: !GetAtt queueDynamoDbReplicaDataDeadLetter.Arn
+    Export:
+      Name: queueDynamoDbReplicaDataDeadLetter
+  
+  dynamoDBReplicaData:
+    Description: Export to Arn AWS Lambda dynamoDBReplicaData
+    Value: !GetAtt dynamoDBReplicaData.Arn
+    Export:
+      Name: queueDynamoDbReplicaDataDeadLetter

@@ -1,0 +1,42 @@
+[
+    {
+      "ParameterKey": "HandlerParameter",
+      "ParameterValue": "handler.handler"
+    },
+    {
+      "ParameterKey": "FunctionName",
+      "ParameterValue": "dynamodb-replica-data"
+    },
+    {
+      "ParameterKey": "Runtime",
+      "ParameterValue": "python3.7"
+    },
+    {
+      "ParameterKey": "Timeout",
+      "ParameterValue": "120"
+    },
+    {
+      "ParameterKey": "MemorySize",
+      "ParameterValue": "256"
+    },
+    {
+      "ParameterKey": "SecGroup",
+      "ParameterValue": "sg-02754f8f0a861bf1b"
+    },
+    {
+      "ParameterKey": "Env",
+      "ParameterValue": "dr"
+    },
+    {
+      "ParameterKey": "AccountReplica",
+      "ParameterValue": "162211386566"
+    },
+    {
+      "ParameterKey": "MessageRetentionPeriod",
+      "ParameterValue": "1209600"
+    },
+    {
+      "ParameterKey": "VisibilityTimeout",
+      "ParameterValue": "60"
+    }
+  ]
