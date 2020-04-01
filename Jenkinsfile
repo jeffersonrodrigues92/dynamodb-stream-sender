@@ -17,6 +17,8 @@ pipeline {
         RUN_CHECKS = true
         S3_BUCKET_ARTIFACT = "cdt-devops-tools-lambda-functions-artifacts"
         S3_BUCKET_TEMPLATE = "cdt-devops-tools-lambda-functions-template"
+        ARCHITETURE = "Serverless"
+        PATH_DEPLOY = "dynamodb-replica-data"
 
 
     }
