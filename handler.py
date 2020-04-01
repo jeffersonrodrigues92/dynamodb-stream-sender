@@ -11,7 +11,7 @@ def handler(event, context):
     region = os.environ['REGION']
     account_dr = os.environ['ACCOUNT_REPLICA']
     datas = event['Records']
-    client = assume_role(account_dr, "ACLManageRole", "dynamodb", region)
+    client = assume_role(account_dr, "ReplicaDataManagerRole", "dynamodb", region)
 
     for data in datas:
         LOG.info(event='REPLICA_DATA', message='Replica Data: {}'.format(data))

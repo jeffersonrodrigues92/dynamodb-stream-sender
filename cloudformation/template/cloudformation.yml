@@ -110,6 +110,23 @@ Resources:
         Value: "sqs"
 
 
+  replicaDataManagerRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+          Statement:
+          - 
+            Effect: Allow
+            Principal:
+              AWS:
+              - !Sub arn:aws:iam::${ACCOUNT_REPLICA}:root
+            Action: sts:AssumeRole
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+      RoleName: ReplicaDataManagerRole
+
+
 Outputs:
   queueReplicaDataDeadLetter:
     Description: Export to Arn SQS Queue queueDynamoDbReplicaDataDeadLetter
