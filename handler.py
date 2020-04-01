@@ -8,7 +8,7 @@ LOG = get_logger()
 
 
 def handler(event, context):
-    region = os.environ['REGION']
+    region = os.environ['REGION_REPLICA']
     account_dr = os.environ['ACCOUNT_REPLICA']
     datas = event['Records']
     client = assume_role(account_dr, "ReplicaDataManagerRole", "dynamodb", region)

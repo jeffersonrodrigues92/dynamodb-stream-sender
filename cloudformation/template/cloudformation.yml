@@ -40,6 +40,9 @@ Parameters:
   AccountReplica:
     Type: String
   
+  RegionReplica:
+    Type: String
+  
   MessageRetentionPeriod:
     Type: String
   
@@ -47,7 +50,6 @@ Parameters:
     Type: String
 
 Resources:
-
   dynamoDBReplicaData:
     Type: AWS::Serverless::Function
     Properties:
@@ -68,7 +70,7 @@ Resources:
           - !ImportValue vpc-subnetPrvA
       Environment:
         Variables:
-          REGION: !Sub ${AWS::Region}
+          REGION_REPLICA: !Ref RegionReplica
           ACCOUNT_REPLICA: !Ref AccountReplica
           
       Tags:

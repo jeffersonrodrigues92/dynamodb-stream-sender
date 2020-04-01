@@ -32,6 +32,10 @@
     "ParameterValue": "614858318717"
   },
   {
+    "ParameterKey": "RegionReplica",
+    "ParameterValue": "us-east-1"
+  },
+  {
     "ParameterKey": "MessageRetentionPeriod",
     "ParameterValue": "1209600"
   },
