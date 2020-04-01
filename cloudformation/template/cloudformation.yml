@@ -113,12 +113,12 @@ Resources:
 Outputs:
   queueReplicaDataDeadLetter:
     Description: Export to Arn SQS Queue queueDynamoDbReplicaDataDeadLetter
-    Value: !GetAtt queueDynamoDbReplicaDataDeadLetter.Arn
+    Value: !GetAtt queueReplicaDataDeadLetter.Arn
     Export:
-      Name: queueDynamoDbReplicaDataDeadLetter
+      Name: queueReplicaDataDeadLetter
   
   dynamoDBReplicaData:
     Description: Export to Arn AWS Lambda dynamoDBReplicaData
     Value: !GetAtt dynamoDBReplicaData.Arn
     Export:
-      Name: queueDynamoDbReplicaDataDeadLetter
+      Name: dynamoDBReplicaData
