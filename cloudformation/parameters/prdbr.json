@@ -5,7 +5,7 @@
   },
   {
     "ParameterKey": "FunctionName",
-    "ParameterValue": "account-extractor-data"
+    "ParameterValue": "dynamodb-replica-data"
   },
   {
     "ParameterKey": "Runtime",
