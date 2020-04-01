@@ -109,29 +109,29 @@ pipeline {
 
                     } else if (BRANCH_NAME.startsWith("develop")) {
                         echo "***** PERFORMING STEPS ON RELEASE BRANCH *****"
-                        env['RUN_BUILD_BRANCH'] = true
+                        env['RUN_BUILD_BRANCH'] = false
                         env['environment'] = "dev"
                         env['RUN_DEPLOY'] = false
                         updateVersion(false)
 
                     } else if (BRANCH_NAME.startsWith("feature")) {
                         echo "***** PERFORMING STEPS ON RELEASE BRANCH *****"
-                        env['RUN_BUILD_BRANCH'] = true
-                        env['environment'] = "hml"
+                        env['RUN_BUILD_BRANCH'] = false
+                        env['environment'] = "dev"
                         env['RUN_DEPLOY'] = false
                         updateVersion(false)
 
                     } else if (BRANCH_NAME.startsWith("release")) {
                         echo "***** PERFORMING STEPS ON RELEASE BRANCH *****"
                         env['RUN_BUILD_BRANCH'] = true
-                        env['environment'] = "hml"
+                        env['environment'] = "dev"
                         env['RUN_DEPLOY'] = false
                         updateVersion(false)
 
                     } else if (BRANCH_NAME.startsWith("hotfix")) {
                         echo "***** PERFORMING STEPS ON RELEASE BRANCH *****"
                         env['RUN_BUILD_BRANCH'] = true
-                        env['environment'] = "hml"
+                        env['environment'] = "dev"
                         env['RUN_DEPLOY'] = false
                         updateVersion(false)
 
@@ -167,16 +167,17 @@ pipeline {
             }
         }
 
-        stage('Deploy stack') {
+         stage('Deploy stack') {
+          when {
+            environment name: 'RUN_DEPLOY', value: 'true'
+          }
           steps {
             script{
-              echo "deploy stack dynamodb-replica-data ${env.environment} to cloudformation"
+              echo "deploy stack account-extractor-data ${env.environment} to cloudformation"
                 script {
-                    if (BRANCH_NAME.startsWith("master")) {
-                        echo "Iniciando o deploy no ambiente de PRD"
-                        sh(script: '''
-                            curl -D - -X "POST" -H "Accept: application/json" -H "Content-Type: application/json" -H "X-Rundeck-Auth-Token: wRPCmvpA3F230lLvaxlXKTtKLkLsvvn9" -d '{"argString":"-template '${fileOutput}' -version '${newVersion}' -path dynamodb-replica-data -Arquitetura Serverless"}' http://rundeck.devtools.caradhras.io:4440/api/19/job/e7f60eb3-81ac-4667-ae9d-791a49bfa6e7/executions
-                        ''',)
+                    if (BRANCH_NAME.startsWith("develop")) {
+                        echo "Iniciando o deploy no ambiente de DEV"
+                        deploy('dev', '06ba7d2a-6ee8-4c6b-ae9f-4c1b7714c850')
                     }
                 }
             }
@@ -207,6 +208,48 @@ pipeline {
         }
         always {
             deleteDir()
+        }
+    }
+}
+
+
+def deploy(environment, job_id){
+    
+    script {
+        echo "Iniciando deploy no ambiente de ${environment}"
+        env['profile'] = environment
+        env['current_commit_message'] = current_commit_message
+        step([$class: "RundeckNotifier",
+            includeRundeckLogs: true,
+            jobId: "${job_id}",
+            nodeFilters: "",
+            options: """
+                        Arquitetura=${ARCHITETURE}
+                        template=${fileOutput}
+                        version=${newVersion}
+                        path=${PATH_DEPLOY}
+                        ChangeLog=${current_commit_message}
+                    """,
+            rundeckInstance: "rundeck.devtools.caradhras.io",
+            shouldFailTheBuild: true,
+            shouldWaitForRundeckJob: true,
+            tags: "",
+            tailLog: true])
+    }
+    valid_stats()
+}
+
+def valid_stats() {
+    script {
+        def stats = sh(script: '''
+                        aws cloudformation describe-stacks --stack-name ${PATH_DEPLOY} --profile ${profile} | jq '.Stacks[0].StackStatus' | sed -e 's/\"//g'
+                             ''', returnStdout: true).trim()
+        if ( stats == 'UPDATE_COMPLETE' || stats == 'CREATE_COMPLETE' || stats == 'OK') {
+             echo "Success"
+        }
+        else {
+            currentBuild.result = 'FAILURE'       
+            error("Problema ao realizar o deploy")
         }
     }
 }
