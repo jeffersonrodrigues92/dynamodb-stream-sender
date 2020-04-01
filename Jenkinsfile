@@ -20,7 +20,6 @@ pipeline {
         ARCHITETURE = "Serverless"
         PATH_DEPLOY = "dynamodb-replica-data"
 
-
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '50'))
@@ -84,6 +83,7 @@ pipeline {
                 }
             }
         }
+
         stage('Pre-Build') {
             when {
                 environment name: 'RUN_PRE_BUILD', value: 'true'
@@ -112,28 +112,28 @@ pipeline {
                     } else if (BRANCH_NAME.startsWith("develop")) {
                         echo "***** PERFORMING STEPS ON RELEASE BRANCH *****"
                         env['RUN_BUILD_BRANCH'] = false
-                        env['environment'] = "dev"
+                        env['environment'] = "hml"
                         env['RUN_DEPLOY'] = false
                         updateVersion(false)
 
                     } else if (BRANCH_NAME.startsWith("feature")) {
                         echo "***** PERFORMING STEPS ON RELEASE BRANCH *****"
                         env['RUN_BUILD_BRANCH'] = false
-                        env['environment'] = "dev"
+                        env['environment'] = "hml"
                         env['RUN_DEPLOY'] = false
                         updateVersion(false)
 
                     } else if (BRANCH_NAME.startsWith("release")) {
                         echo "***** PERFORMING STEPS ON RELEASE BRANCH *****"
-                        env['RUN_BUILD_BRANCH'] = true
-                        env['environment'] = "dev"
+                        env['RUN_BUILD_BRANCH'] = false
+                        env['environment'] = "hml"
                         env['RUN_DEPLOY'] = false
                         updateVersion(false)
 
                     } else if (BRANCH_NAME.startsWith("hotfix")) {
                         echo "***** PERFORMING STEPS ON RELEASE BRANCH *****"
-                        env['RUN_BUILD_BRANCH'] = true
-                        env['environment'] = "dev"
+                        env['RUN_BUILD_BRANCH'] = false
+                        env['environment'] = "hml"
                         env['RUN_DEPLOY'] = false
                         updateVersion(false)
 
@@ -169,13 +169,13 @@ pipeline {
             }
         }
 
-         stage('Deploy stack') {
+        stage('Deploy stack') {
           when {
             environment name: 'RUN_DEPLOY', value: 'true'
           }
           steps {
             script{
-              echo "deploy stack account-extractor-data ${env.environment} to cloudformation"
+              echo "deploy stack dynamodb-replica-data ${env.environment} to cloudformation"
                 script {
                     if (BRANCH_NAME.startsWith("develop")) {
                         echo "Iniciando o deploy no ambiente de DEV"
@@ -185,7 +185,7 @@ pipeline {
             }
           }
       }
-        stage('Deploy stack DR') {
+      stage('Deploy stack DR') {
           steps {
             script{
               echo "deploy stack dynamodb-replica-data ${env.environment} to cloudformation"
@@ -198,6 +198,7 @@ pipeline {
             }
           }
       }
+
     }
     post {
         success {
@@ -215,47 +216,6 @@ pipeline {
 }
 
 
-def deploy(environment, job_id){
-    
-    script {
-        echo "Iniciando deploy no ambiente de ${environment}"
-        env['profile'] = environment
-        env['current_commit_message'] = current_commit_message
-        step([$class: "RundeckNotifier",
-            includeRundeckLogs: true,
-            jobId: "${job_id}",
-            nodeFilters: "",
-            options: """
-                        Arquitetura=${ARCHITETURE}
-                        template=${fileOutput}
-                        version=${newVersion}
-                        path=${PATH_DEPLOY}
-                        ChangeLog=${current_commit_message}
-                    """,
-            rundeckInstance: "rundeck.devtools.caradhras.io",
-            shouldFailTheBuild: true,
-            shouldWaitForRundeckJob: true,
-            tags: "",
-            tailLog: true])
-    }
-    valid_stats()
-}
-
-def valid_stats() {
-    script {
-        def stats = sh(script: '''
-                        aws cloudformation describe-stacks --stack-name ${PATH_DEPLOY} --profile ${profile} | jq '.Stacks[0].StackStatus' | sed -e 's/\"//g'
-                             ''', returnStdout: true).trim()
-        if ( stats == 'UPDATE_COMPLETE' || stats == 'CREATE_COMPLETE' || stats == 'OK') {
-             echo "Success"
-        }
-        else {
-            currentBuild.result = 'FAILURE'       
-            error("Problema ao realizar o deploy")
-        }
-    }
-}
-
 def notifyBuild(String buildStatus = 'STARTED') {
     buildStatus = buildStatus ?: 'SUCCESSFUL'
 
@@ -269,14 +229,14 @@ def notifyBuild(String buildStatus = 'STARTED') {
     JSONArray attachments = new JSONArray();
     JSONObject attachment = new JSONObject();
 
-  if (buildStatus == 'STARTED') {
+    if (buildStatus == 'STARTED') {
         colorCode = '#FFFF00'
-        attachment.put('text','Replicando mudança')
-        attachment.put('thumb_url','https://s3.us-east-2.amazonaws.com/upload-icon/uploads/icons/png/9820297401540553608-512.png')
+        attachment.put('text','Começando o build. Será que certo dará?')
+        attachment.put('thumb_url','https://vignette.wikia.nocookie.net/starwars/images/d/d5/MP-YodaSpecies.png/revision/latest?cb=20140412000157')
     } else if (buildStatus == 'SUCCESSFUL') {
         colorCode = '#00FF00'
-        attachment.put('text','Replicação Finalizada Com Sucesso!')
-        attachment.put('thumb_url','https://s3.us-east-2.amazonaws.com/upload-icon/uploads/icons/png/9820297401540553608-512.png')
+        attachment.put('text','Com sucesso o build foi feito!')
+        attachment.put('thumb_url','http://www.saindodamatrix.com.br/archives/sw-yoda.jpg')
 
         JSONArray fields = new JSONArray();
         JSONObject field = new JSONObject();
@@ -297,11 +257,13 @@ def notifyBuild(String buildStatus = 'STARTED') {
 
         attachment.put('fields',fields);
 
+
     } else {
-        attachment.put('text','Erro ao Replicar Mudanças')
-        attachment.put('thumb_url','https://s3.us-east-2.amazonaws.com/upload-icon/uploads/icons/png/9820297401540553608-512.png')
+        attachment.put('text','Errado o build está!')
+        attachment.put('thumb_url','https://pbs.twimg.com/profile_images/690942305/yoda-anger_400x400.png')
         colorCode = '#FF0000'
     }
+
 
     String buildUrl = "${env.BUILD_URL}";
     attachment.put('title', subject);
@@ -314,6 +276,24 @@ def notifyBuild(String buildStatus = 'STARTED') {
 
     echo attachments.toString();
     slackSend(attachments: attachments.toString())
+
+}
+
+def checkCommitBehind() {
+    sh 'echo "Verifica se branch necessita de merge com master."'
+    script {
+        sh(script: '''set +x; set +e;
+                      git fetch;
+                      commitsBehind=$(git rev-list --left-right --count origin/master... |awk '{print $1}');
+                      if [ ${commitsBehind} -ne 0 ]
+                      then
+                        echo "Esta branch está ${commitsBehind} commits atrás da master!"
+                        exit 1
+                      else
+                        echo "Esta branch não tem commits atrás da master."
+                      fi''')
+    }
+
 }
 
 def updateVersion(boolean isMaster){
@@ -389,19 +369,44 @@ def get_envs(){
     return envs
   }
 }
-def checkCommitBehind() {
-    sh 'echo "Verifica se branch necessita de merge com master."'
+
+def deploy(environment, job_id){
+    
     script {
-        sh(script: '''set +x; set +e;
-                      git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master
-                      git fetch --no-tags
-                      commitsBehind=$(git rev-list --left-right --count origin/master... |awk '{print $1}')
-                      if [ "${commitsBehind}" -ne 0 ]
-                      then
-                        echo "Esta branch está ${commitsBehind} commits atrás da master!"
-                        exit 1
-                      else
-                       echo "Esta branch não tem commits atrás da master."
-                      fi''')
+        echo "Iniciando deploy no ambiente de ${environment}"
+        env['profile'] = environment
+        env['current_commit_message'] = current_commit_message
+        step([$class: "RundeckNotifier",
+            includeRundeckLogs: true,
+            jobId: "${job_id}",
+            nodeFilters: "",
+            options: """
+                        Arquitetura=${ARCHITETURE}
+                        template=${fileOutput}
+                        version=${newVersion}
+                        path=${PATH_DEPLOY}
+                        ChangeLog=${current_commit_message}
+                    """,
+            rundeckInstance: "rundeck.devtools.caradhras.io",
+            shouldFailTheBuild: true,
+            shouldWaitForRundeckJob: true,
+            tags: "",
+            tailLog: true])
+    }
+    valid_stats()
+}
+
+def valid_stats() {
+    script {
+        def stats = sh(script: '''
+                        aws cloudformation describe-stacks --stack-name ${PATH_DEPLOY} --profile ${profile} | jq '.Stacks[0].StackStatus' | sed -e 's/\"//g'
+                             ''', returnStdout: true).trim()
+        if ( stats == 'UPDATE_COMPLETE' || stats == 'CREATE_COMPLETE' || stats == 'OK') {
+             echo "Success"
+        }
+        else {
+            currentBuild.result = 'FAILURE'       
+            error("Problema ao realizar o deploy")
+        }
     }
 }
