@@ -85,6 +85,7 @@ Resources:
     Properties: 
       MessageRetentionPeriod: !Ref MessageRetentionPeriod 
       QueueName: queueReplicaDataDeadLetter
+      VisibilityTimeout: !Ref VisibilityTimeout
       Tags: 
       - 
         Key: "env"
@@ -108,7 +109,6 @@ Resources:
         Key: "resource"
         Value: "sqs"
 
-        VisibilityTimeout: !Ref VisibilityTimeout
 
 Outputs:
   queueReplicaDataDeadLetter:
@@ -122,4 +122,3 @@ Outputs:
     Value: !GetAtt dynamoDBReplicaData.Arn
     Export:
       Name: dynamoDBReplicaData
-      
