@@ -120,7 +120,7 @@ Resources:
             Effect: Allow
             Principal:
               AWS:
-              - !Sub arn:aws:iam::${ACCOUNT_REPLICA}:root
+              - !Sub arn:aws:iam::${AccountReplica}:root
             Action: sts:AssumeRole
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
