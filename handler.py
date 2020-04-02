@@ -73,5 +73,5 @@ def assume_role(account, role, resource, region):
         LOG.error(event='REPLICA_DATA', message='Error To Assume Role With Exception{}'.format(exception))
         raise exception
     
-    LOG.info(event='REPLICA_DATA', message='Item Assumed with Succeed')
+    LOG.info(event='REPLICA_DATA', message='Role Assumed with Succeed')
     return client_resource
