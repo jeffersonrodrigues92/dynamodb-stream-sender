@@ -51,9 +51,6 @@ Parameters:
   
   FifoQueue:
     Type: String
-
-  MaxReceiveCount:
-    Type: String
   
   Env:
     Type: String

@@ -50,9 +50,5 @@
   {
     "ParameterKey": "ContentBasedDeduplication",
     "ParameterValue": "true"
-  },
-  {
-    "ParameterKey": "MaxReceiveCount",
-    "ParameterValue": "5"
   }
 ]
