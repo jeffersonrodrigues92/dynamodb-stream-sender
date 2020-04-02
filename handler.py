@@ -15,7 +15,13 @@ def handler(event, context):
     account_dr = os.environ['ACCOUNT_REPLICA']
     datas = event['Records']
 
-    client = assume_role(account_dr, "ReplicaDataManagerRole", "dynamodb", region)
+    try:
+        client = assume_role(account_dr, "ReplicaDataManagerRole", "dynamodb", region)
+    except Exception as exception:
+        for data in datas:
+            LOG.info(event='REPLICA_DATA', message='Sending Message To Queue: {}'.format(data))
+            sqs_helper.send_message(data)
+        raise exception
 
     for data in datas:
         LOG.info(event='REPLICA_DATA', message='Replica Data: {}'.format(data))
@@ -65,7 +71,6 @@ def assume_role(account, role, resource, region):
         )
     except Exception as exception:
         LOG.error(event='REPLICA_DATA', message='Error To Assume Role With Exception{}'.format(exception))
-        sqs_helper.send_message(data)
         raise exception
     
     LOG.info(event='REPLICA_DATA', message='Item Assumed with Succeed')

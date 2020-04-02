@@ -78,9 +78,7 @@ Resources:
           REGION_REPLICA: !Ref RegionReplica
           ACCOUNT_REPLICA: !Ref AccountReplica
           FIFO_QUEUE_NAME: !Join [ "/", [!Sub "https://sqs.${AWS::Region}.amazonaws.com", !Sub "${AWS::AccountId}", "queueReplicaDataDeadLetter.fifo"]]
-          
-          #!Sub https://sqs.${AWS::Region}.amazonaws.com/${AWS::AccountId}/queueReplicaDataDeadLetter.fifo
-          
+                    
       Tags:
         env : !Ref Env
         service : !Ref Product
