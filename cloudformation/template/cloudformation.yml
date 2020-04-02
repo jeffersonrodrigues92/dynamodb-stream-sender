@@ -91,7 +91,7 @@ Resources:
     Type: AWS::SQS::Queue
     Properties: 
       MessageRetentionPeriod: !Ref MessageRetentionPeriod 
-      QueueName: queueReplicaDataDeadLetter
+      QueueName: queueReplicaDataDeadLetter.fifo
       VisibilityTimeout: !Ref VisibilityTimeout
       ContentBasedDeduplication: !Ref ContentBasedDeduplication
       FifoQueue: !Ref FifoQueue
