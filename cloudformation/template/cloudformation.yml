@@ -77,7 +77,7 @@ Resources:
         Variables:
           REGION_REPLICA: !Ref RegionReplica
           ACCOUNT_REPLICA: !Ref AccountReplica
-          FIFO_QUEUE_NAME: !Join [ "/", ["http://",  "sqs.", !Sub "${AWS::Region}'.amazonaws.com", !Sub "${AWS::AccountId}", "queueReplicaDataDeadLetter.fifo"]]
+          FIFO_QUEUE_NAME: !Join [ "/", ["http://", !Sub "sqs.${AWS::Region}.amazonaws.com", !Sub "${AWS::AccountId}", "queueReplicaDataDeadLetter.fifo"]]
           
           #!Sub https://sqs.${AWS::Region}.amazonaws.com/${AWS::AccountId}/queueReplicaDataDeadLetter.fifo
           
