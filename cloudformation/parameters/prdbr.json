@@ -46,5 +46,9 @@
   {
     "ParameterKey": "FifoQueue",
     "ParameterValue": "true"
+  },
+  {
+    "ParameterKey": "ContentBasedDeduplication",
+    "ParameterValue": "true"
   }
 ]

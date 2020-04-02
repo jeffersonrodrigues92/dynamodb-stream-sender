@@ -77,6 +77,7 @@ Resources:
         Variables:
           REGION_REPLICA: !Ref RegionReplica
           ACCOUNT_REPLICA: !Ref AccountReplica
+          FIFO_QUEUE_NAME: !Sub https://sqs.${AWS::Region}.amazonaws.com/${AWS::AccountId}/queueReplicaDataDeadLetter.fifo	
           
       Tags:
         env : !Ref Env
