@@ -51,6 +51,9 @@ Parameters:
   
   FifoQueue:
     Type: String
+
+  MaxReceiveCount:
+    Type: String
   
   Env:
     Type: String
@@ -88,11 +91,45 @@ Resources:
         email : cloud
         resource : lambda
 
-  queueReplicaDataDeadLetter:    
+  queueReplicaDataResilience:    
     Type: AWS::SQS::Queue
     Properties: 
       MessageRetentionPeriod: !Ref MessageRetentionPeriod 
-      QueueName: queueReplicaDataDeadLetter.fifo
+      QueueName: queueReplicaDataResilience.fifo
+      VisibilityTimeout: !Ref VisibilityTimeout
+      ContentBasedDeduplication: !Ref ContentBasedDeduplication
+      FifoQueue: !Ref FifoQueue
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt queueReplicaDataResilienceDLQ.Arn
+        maxReceiveCount: !Ref MaxReceiveCount
+      Tags: 
+      - 
+        Key: "env"
+        Value: !Ref Env
+      - 
+        Key: "service"
+        Value: !Ref Product
+      - 
+        Key: "stack"
+        Value: !Sub ${AWS::StackName}
+      - 
+        Key: "squad"
+        Value: "squad-cloud"
+      - 
+        Key: "slack"
+        Value: "squad-cloud"
+      - 
+        Key: "email"
+        Value: "cloud"
+      - 
+        Key: "resource"
+        Value: "sqs"
+  
+  queueReplicaDataResilienceDLQ:    
+    Type: AWS::SQS::Queue
+    Properties: 
+      MessageRetentionPeriod: !Ref MessageRetentionPeriod 
+      QueueName: queueReplicaDataResilienceDLQ.fifo
       VisibilityTimeout: !Ref VisibilityTimeout
       ContentBasedDeduplication: !Ref ContentBasedDeduplication
       FifoQueue: !Ref FifoQueue
@@ -136,11 +173,6 @@ Resources:
       RoleName: ReplicaDataManagerRole
 
 Outputs:
-  queueReplicaDataDeadLetter:
-    Description: Export to Arn SQS Queue queueDynamoDbReplicaDataDeadLetter
-    Value: !GetAtt queueReplicaDataDeadLetter.Arn
-    Export:
-      Name: queueReplicaDataDeadLetter
   
   dynamoDBReplicaData:
     Description: Export to Arn AWS Lambda dynamoDBReplicaData
