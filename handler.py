@@ -20,7 +20,8 @@ def handler(event, context):
     except Exception as exception:
         for data in datas:
             LOG.info(event='REPLICA_DATA', message='Sending Message To Queue: {}'.format(data))
-            sqs_helper.send_message(data)
+            table_name = get_table_name(data['eventSourceARN'])
+            sqs_helper.send_message(data, table_name)
         raise exception
 
     for data in datas:
@@ -45,7 +46,7 @@ def replica_data(client, data):
         
    except Exception as exception:
         LOG.error(event='REPLICA_DATA', message='Error To {} in Table {} To The Item {} With Exception {}'.format(event_name, table_name, data, exception))
-        sqs_helper.send_message(data)
+        sqs_helper.send_message(data, table_name)
         raise exception
 
 
