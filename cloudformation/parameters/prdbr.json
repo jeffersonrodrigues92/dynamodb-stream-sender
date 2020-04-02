@@ -42,5 +42,9 @@
   {
     "ParameterKey": "VisibilityTimeout",
     "ParameterValue": "60"
+  },
+  {
+    "ParameterKey": "FifoQueue",
+    "ParameterValue": "true"
   }
 ]

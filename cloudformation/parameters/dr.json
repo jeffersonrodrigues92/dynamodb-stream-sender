@@ -42,5 +42,13 @@
     {
       "ParameterKey": "VisibilityTimeout",
       "ParameterValue": "60"
+    },
+    {
+      "ParameterKey": "FifoQueue",
+      "ParameterValue": "true"
+    },
+    {
+      "ParameterKey": "ContentBasedDeduplication",
+      "ParameterValue": "true"
     }
   ]

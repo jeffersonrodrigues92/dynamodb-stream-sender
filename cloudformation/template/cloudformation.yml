@@ -32,10 +32,7 @@ Parameters:
 
   Product:
     Type: String
-    Default: "rich-richie"
-
-  Env:
-    Type: String
+    Default: "dynamodb-replica-data"
 
   AccountReplica:
     Type: String
@@ -47,6 +44,15 @@ Parameters:
     Type: String
   
   VisibilityTimeout:
+    Type: String
+
+  ContentBasedDeduplication:
+    Type: String
+  
+  FifoQueue:
+    Type: String
+  
+  Env:
     Type: String
 
 Resources:
@@ -62,7 +68,6 @@ Resources:
       Policies: AWSLambdaBasicExecutionRole
       CodeUri: ../../.serverless/dynamodb-replica-data.zip
 
-
       VpcConfig:
         SecurityGroupIds:
           - !Ref SecGroup
@@ -75,7 +80,7 @@ Resources:
           
       Tags:
         env : !Ref Env
-        service : dynamodb-replica-data
+        service : !Ref Product
         stack : !Sub ${AWS::StackName}
         squad : squad-cloud
         slack : squad-cloud
@@ -88,13 +93,15 @@ Resources:
       MessageRetentionPeriod: !Ref MessageRetentionPeriod 
       QueueName: queueReplicaDataDeadLetter
       VisibilityTimeout: !Ref VisibilityTimeout
+      ContentBasedDeduplication: !Ref ContentBasedDeduplication
+      FifoQueue: !Ref FifoQueue
       Tags: 
       - 
         Key: "env"
         Value: !Ref Env
       - 
         Key: "service"
-        Value: "dynamodb-replica-data"
+        Value: !Ref Product
       - 
         Key: "stack"
         Value: !Sub ${AWS::StackName}
@@ -111,7 +118,6 @@ Resources:
         Key: "resource"
         Value: "sqs"
 
-
   replicaDataManagerRole:
     Type: AWS::IAM::Role
     Properties: 
@@ -127,7 +133,6 @@ Resources:
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
       RoleName: ReplicaDataManagerRole
-
 
 Outputs:
   queueReplicaDataDeadLetter:
