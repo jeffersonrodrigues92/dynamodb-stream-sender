@@ -41,7 +41,7 @@ def replica_data(client, data):
             client.put_item(TableName=table_name, Item=data['dynamodb']['NewImage'])
             LOG.info(event='REPLICA_DATA', message='Table {} in DR Will Be Receive {} in with Data {} '.format(table_name, event_name, data))
         else:
-            client.delete_item(TableName=table_name, Item=data['dynamodb']['Keys'])
+            client.delete_item(TableName=table_name, Key=data['dynamodb']['Keys'])
             LOG.info(event='REPLICA_DATA', message='Table {} in DR  Will Be Receive {} in with Data {} '.format(table_name, event_name, data))
         
    except Exception as exception:
