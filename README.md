@@ -6,6 +6,16 @@ O serviço ao todo contempla a seguinte arquitetura abaixo:
 
 ![alt text](https://github.com/cdt-baas/dynamodb-replica-data/blob/master/arquitetura.jpg)
 
+### Responsabilidades do DynamoDB Replica Data 
+
+O serviço desse reposositório é responsável por receber a cada mudança de evento um registro do DynamoDB, seja o event `INSERT`, `MODIFY` e `REMOVE`, de forma ordenada gerando um novo registro no Stream associado a tabela.
+
+O serviço apenas recebe o evento, idenfica e replica para o ambiente de Disaster Recovery, caso no momento da replicação aconteça algum erro o serviço move a mensagem manualmente para o SQS e receberemos um alerta via DataDog no grupo de monitoração do DR.
+
+Veja como atuar em caso a mensagem caia na fila do SQS seguindo as intruções do repositório abaixo:
+
+- [DynamoDB Replica Data Resilience](https://github.com/cdt-baas/dynamodb-replica-data-resilience)
+
 Esse projeto trabalha com as seguintes tecnologias:
 
 - [AWS Lambda](https://docs.aws.amazon.com/lambda/)
@@ -18,15 +28,6 @@ Esse projeto trabalha com as seguintes tecnologias:
 
 - Python
 
-### Responsabilidades do DynamoDB Replica Data 
-
-O serviço desse reposositório é responsável por receber a cada mudança de evento um registro do DynamoDB, seja o event `INSERT`, `MODIFY` e `REMOVE`, de forma ordenada gerando um novo registro no Stream associado a tabela.
-
-O serviço apenas recebe o evento, idenfica e replica para o ambiente de Disaster Recovery, caso no momento da replicação aconteça algum erro o serviço move a mensagem manualmente para o SQS e receberemos um alerta via DataDog no grupo de monitoração do DR.
-
-Veja como atuar em caso a mensagem caia na fila do SQS seguindo as intruções do repositório abaixo:
-
-- [DynamoDB Replica Data Resilience](https://github.com/cdt-baas/dynamodb-replica-data-resilience)
 
 ### Dúvidas? 
 
