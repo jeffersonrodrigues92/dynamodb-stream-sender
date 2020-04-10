@@ -14,13 +14,13 @@ Esse projeto trabalha com as seguintes tecnologias:
 - [AWS DynamoDB Strems](https://docs.aws.amazon.com/dynamodb/)
 
 
-### Linguagem de Desenvolvimento
+### Linguagem de Desenvolvida
 
 - Python
 
 ### Responsabilidades do DynamoDB Replica Data 
 
-O serviço desse reposositório é responsável por receber a cada mudança de evento um registro do DynamoDB, seja o event INSERT, MODIFY e REMOVE, de forma ordenada gerando um novo registro no Stream associado a tabela.
+O serviço desse reposositório é responsável por receber a cada mudança de evento um registro do DynamoDB, seja o event `INSERT`, `MODIFY` e `REMOVE`, de forma ordenada gerando um novo registro no Stream associado a tabela.
 
 O serviço apenas recebe o evento, idenfica e replica para o ambiente de Disaster Recovery, caso no momento da replicação aconteça algum erro o serviço move a mensagem manualmente para o SQS e receberemos um alerta via DataDog no grupo de monitoração do DR.
 
