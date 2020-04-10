@@ -1,4 +1,4 @@
-# DynamoDB Replicação de Dados em Tempo Real
+# DynamoDB DynamoDB Replica Data - Real Time
 
 Esse projeto tem o intuito de replicar dados em tempo real do DynamoDB de Produção para o Ambiente de Disaster Recovery, mantendo a sincronização de dados entre as tabelas em tempo real, vale lembrar que a tabela do ambiente de Produção deve existir também no ambiente de Disaster Recovery.
 
