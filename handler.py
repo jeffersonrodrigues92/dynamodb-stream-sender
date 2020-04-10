@@ -12,11 +12,11 @@ sqs_helper = SQSHelper()
 def handler(event, context):
 
     region = os.environ['REGION_REPLICA']
-    account_dr = os.environ['ACCOUNT_REPLICA']
+    account = os.environ['ACCOUNT_REPLICA']
     datas = event['Records']
 
     try:
-        client = assume_role(account_dr, "ReplicaDataManagerRole", "dynamodb", region)
+        client = assume_role(account, "ReplicaDataManagerRole", "dynamodb", region)
     except Exception as exception:
         for data in datas:
             LOG.info(event='REPLICA_DATA', message='Sending Message To Queue: {}'.format(data))
