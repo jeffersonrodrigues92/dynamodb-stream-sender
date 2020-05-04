@@ -40,18 +40,6 @@ Parameters:
   RegionReplica:
     Type: String
   
-  MessageRetentionPeriod:
-    Type: String
-  
-  VisibilityTimeout:
-    Type: String
-
-  ContentBasedDeduplication:
-    Type: String
-  
-  FifoQueue:
-    Type: String
-  
   Env:
     Type: String
 
