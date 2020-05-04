@@ -13,7 +13,7 @@
   },
   {
     "ParameterKey": "Timeout",
-    "ParameterValue": "120"
+    "ParameterValue": "900"
   },
   {
     "ParameterKey": "MemorySize",
