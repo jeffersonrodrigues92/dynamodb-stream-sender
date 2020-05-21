@@ -37,7 +37,7 @@ Parameters:
     Type: String
 
 Resources:
-  dynamoDBReplicaData:
+  dynamoDBStreamSender:
     Type: AWS::Serverless::Function
     Properties:
       Handler: !Ref HandlerParameter
@@ -67,9 +67,9 @@ Resources:
         resource : lambda
 
 Outputs:
-  dynamoDBReplicaData:
-    Description: Export to Arn AWS Lambda dynamoDBReplicaData
-    Value: !GetAtt dynamoDBReplicaData.Arn
+  dynamoDBStreamSender:
+    Description: Export to Arn AWS Lambda dynamoDBStreamSender
+    Value: !GetAtt dynamoDBStreamSender.Arn
     Export:
-      Name: dynamoDBReplicaData
+      Name: dynamoDBStreamSender
 
