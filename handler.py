@@ -11,8 +11,6 @@ sqs_helper = SQSHelper()
 
 def handler(event, context):
 
-    region = os.environ['REGION_REPLICA']
-    account = os.environ['ACCOUNT_REPLICA']
     datas = event['Records']
 
     try:

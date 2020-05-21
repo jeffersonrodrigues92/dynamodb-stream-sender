@@ -28,10 +28,6 @@
       "ParameterValue": "dr"
     },
     {
-      "ParameterKey": "AccountReplica",
-      "ParameterValue": "162211386566"
-    },
-    {
       "ParameterKey": "RegionReplica",
       "ParameterValue": "sa-east-1"
     },

@@ -33,12 +33,6 @@ Parameters:
   Product:
     Type: String
     Default: "dynamodb-stream-sender"
-
-  AccountReplica:
-    Type: String
-  
-  RegionReplica:
-    Type: String
   
   MessageRetentionPeriod:
     Type: String
@@ -80,8 +74,6 @@ Resources:
           - !ImportValue vpc-subnetPrvA
       Environment:
         Variables:
-          REGION_REPLICA: !Ref RegionReplica
-          ACCOUNT_REPLICA: !Ref AccountReplica
           FIFO_QUEUE_NAME: !Ref queueReplicaData
                     
       Tags:
@@ -140,4 +132,3 @@ Outputs:
     Export:
       Name: dynamoDBReplicaData
 
-      
