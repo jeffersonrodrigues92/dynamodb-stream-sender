@@ -30,29 +30,5 @@
     {
       "ParameterKey": "RegionReplica",
       "ParameterValue": "sa-east-1"
-    },
-    {
-      "ParameterKey": "MessageRetentionPeriod",
-      "ParameterValue": "1209600"
-    },
-    {
-      "ParameterKey": "VisibilityTimeout",
-      "ParameterValue": "900"
-    },
-    {
-      "ParameterKey": "FifoQueue",
-      "ParameterValue": "true"
-    },
-    {
-      "ParameterKey": "ContentBasedDeduplication",
-      "ParameterValue": "true"
-    },
-    {
-      "ParameterKey": "MaxReceiveCount",
-      "ParameterValue": "5"
-    },
-    {
-      "ParameterKey": "BatchSize",
-      "ParameterValue": "1"
     }
   ]

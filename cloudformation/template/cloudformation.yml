@@ -33,25 +33,6 @@ Parameters:
   Product:
     Type: String
     Default: "dynamodb-stream-sender"
-  
-  MessageRetentionPeriod:
-    Type: String
-  
-  VisibilityTimeout:
-    Type: String
-
-  ContentBasedDeduplication:
-    Type: String
-  
-  FifoQueue:
-    Type: String
-  
-  MaxReceiveCount:
-    Type: String
-  
-  BatchSize:
-    Type: String 
-
   Env:
     Type: String
 
@@ -72,9 +53,9 @@ Resources:
           - !Ref SecGroup
         SubnetIds:
           - !ImportValue vpc-subnetPrvA
-      Environment:
-        Variables:
-          FIFO_QUEUE_NAME: !Ref queueReplicaData
+      #Environment:
+      #  Variables:
+      #    FIFO_QUEUE_NAME: !ImportValue queueReplicaData
                     
       Tags:
         env : !Ref Env
@@ -84,46 +65,6 @@ Resources:
         slack : squad-cloud
         email : cloud
         resource : lambda
-
-
-  queueReplicaData:    
-    Type: AWS::SQS::Queue
-    Properties: 
-      MessageRetentionPeriod: !Ref MessageRetentionPeriod 
-      QueueName: queueReplicaData.fifo
-      VisibilityTimeout: !Ref VisibilityTimeout
-      ContentBasedDeduplication: !Ref ContentBasedDeduplication
-      FifoQueue: !Ref FifoQueue
-      Tags: 
-      - 
-        Key: "env"
-        Value: !Ref Env
-      - 
-        Key: "service"
-        Value: !Ref Product
-      - 
-        Key: "stack"
-        Value: !Sub ${AWS::StackName}
-      - 
-        Key: "squad"
-        Value: "squad-cloud"
-      - 
-        Key: "slack"
-        Value: "squad-cloud"
-      - 
-        Key: "email"
-        Value: "cloud"
-      - 
-        Key: "resource"
-        Value: "sqs"
-    
-  sqsTrigger:
-    Type: AWS::Lambda::EventSourceMapping
-    Properties:
-      BatchSize: !Ref BatchSize
-      Enabled: false
-      EventSourceArn: !GetAtt queueReplicaData.Arn
-      FunctionName: !GetAtt dynamoDBReplicaData.Arn
 
 Outputs:
   dynamoDBReplicaData:
