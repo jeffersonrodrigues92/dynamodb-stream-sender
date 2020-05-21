@@ -26,9 +26,5 @@
   {
     "ParameterKey": "Env",
     "ParameterValue": "prdbr"
-  },
-  {
-    "ParameterKey": "RegionReplica",
-    "ParameterValue": "us-east-1"
   }
 ]

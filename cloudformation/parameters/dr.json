@@ -26,9 +26,5 @@
     {
       "ParameterKey": "Env",
       "ParameterValue": "dr"
-    },
-    {
-      "ParameterKey": "RegionReplica",
-      "ParameterValue": "sa-east-1"
     }
   ]
