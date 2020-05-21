@@ -73,7 +73,6 @@ Resources:
       Role: !Sub arn:aws:iam::${AWS::AccountId}:role/LambdaExecutionRole
       Policies: AWSLambdaBasicExecutionRole
       CodeUri: ../../.serverless/dynamodb-stream-sender.zip
-
       VpcConfig:
         SecurityGroupIds:
           - !Ref SecGroup
