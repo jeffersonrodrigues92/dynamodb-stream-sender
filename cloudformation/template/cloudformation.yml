@@ -32,7 +32,14 @@ Parameters:
 
   Product:
     Type: String
-    Default: "dynamodb-stream-sender"
+    Default: dynamodb-stream-sender
+  
+  RegionReplica:
+    Type: String
+  
+  AccountReplica:
+    Type: String
+    
   Env:
     Type: String
 
@@ -53,9 +60,11 @@ Resources:
           - !Ref SecGroup
         SubnetIds:
           - !ImportValue vpc-subnetPrvA
-      #Environment:
-      #  Variables:
-      #    FIFO_QUEUE_NAME: !ImportValue queueReplicaData
+      Environment:
+        Variables:
+          FIFO_QUEUE_NAME: !ImportValue queueReplicaData
+          REPLICA_REGION: !Ref RegionReplica
+          ACCOUNT_REPLICA: !Ref AccountReplica
                     
       Tags:
         env : !Ref Env
@@ -66,6 +75,23 @@ Resources:
         email : cloud
         resource : lambda
 
+
+  SenderStreamSQSRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - 
+            Effect: Allow
+            Principal:
+              AWS:
+              - !Sub arn:aws:iam::${AccountReplica}:root
+            Action: sts:AssumeRole
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonSQSFullAccess
+      RoleName: SenderStreamSQSRole
+
 Outputs:
   dynamoDBStreamSender:
     Description: Export to Arn AWS Lambda dynamoDBStreamSender
@@ -74,4 +100,3 @@ Outputs:
       Name: dynamoDBStreamSender
 
 
-      

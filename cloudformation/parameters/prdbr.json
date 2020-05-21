@@ -26,5 +26,13 @@
   {
     "ParameterKey": "Env",
     "ParameterValue": "prdbr"
+  },
+  {
+    "ParameterKey": "RegionReplica",
+    "ParameterValue": "us-east-1"
+  },
+  {
+    "ParameterKey": "AccountReplica",
+    "ParameterValue": "614858318717"
   }
 ]

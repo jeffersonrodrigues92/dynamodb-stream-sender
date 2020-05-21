@@ -26,5 +26,13 @@
     {
       "ParameterKey": "Env",
       "ParameterValue": "dr"
+    },
+    {
+      "ParameterKey": "RegionReplica",
+      "ParameterValue": "sa-east-1"
+    },
+    {
+      "ParameterKey": "AccountReplica",
+      "ParameterValue": "162211386566"
     }
   ]
