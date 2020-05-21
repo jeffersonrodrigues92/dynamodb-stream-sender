@@ -40,6 +40,24 @@ Parameters:
   RegionReplica:
     Type: String
   
+  MessageRetentionPeriod:
+    Type: String
+  
+  VisibilityTimeout:
+    Type: String
+
+  ContentBasedDeduplication:
+    Type: String
+  
+  FifoQueue:
+    Type: String
+  
+  MaxReceiveCount:
+    Type: String
+  
+  BatchSize:
+    Type: String 
+
   Env:
     Type: String
 
@@ -76,21 +94,45 @@ Resources:
         email : cloud
         resource : lambda
 
-  replicaDataManagerRole:
-    Type: AWS::IAM::Role
+
+  queueReplicaData:    
+    Type: AWS::SQS::Queue
     Properties: 
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - 
-            Effect: Allow
-            Principal:
-              AWS:
-              - !Sub arn:aws:iam::${AccountReplica}:root
-            Action: sts:AssumeRole
-      ManagedPolicyArns: 
-        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
-      RoleName: ReplicaDataManagerRole
+      MessageRetentionPeriod: !Ref MessageRetentionPeriod 
+      QueueName: queueReplicaData.fifo
+      VisibilityTimeout: !Ref VisibilityTimeout
+      ContentBasedDeduplication: !Ref ContentBasedDeduplication
+      FifoQueue: !Ref FifoQueue
+      Tags: 
+      - 
+        Key: "env"
+        Value: !Ref Env
+      - 
+        Key: "service"
+        Value: !Ref Product
+      - 
+        Key: "stack"
+        Value: !Sub ${AWS::StackName}
+      - 
+        Key: "squad"
+        Value: "squad-cloud"
+      - 
+        Key: "slack"
+        Value: "squad-cloud"
+      - 
+        Key: "email"
+        Value: "cloud"
+      - 
+        Key: "resource"
+        Value: "sqs"
+    
+  sqsTrigger:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: !Ref BatchSize
+      Enabled: false
+      EventSourceArn: !GetAtt queueReplicaData.Arn
+      FunctionName: !GetAtt queueReplicaData.Arn
 
 Outputs:
   
