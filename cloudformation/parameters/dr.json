@@ -5,7 +5,7 @@
     },
     {
       "ParameterKey": "FunctionName",
-      "ParameterValue": "dynamodb-replica-data"
+      "ParameterValue": "dynamodb-stream-sender"
     },
     {
       "ParameterKey": "Runtime",

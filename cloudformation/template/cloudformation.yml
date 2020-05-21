@@ -32,7 +32,7 @@ Parameters:
 
   Product:
     Type: String
-    Default: "dynamodb-replica-data"
+    Default: "dynamodb-stream-sender"
 
   AccountReplica:
     Type: String
@@ -54,7 +54,7 @@ Resources:
       MemorySize: !Ref MemorySize
       Role: !Sub arn:aws:iam::${AWS::AccountId}:role/LambdaExecutionRole
       Policies: AWSLambdaBasicExecutionRole
-      CodeUri: ../../.serverless/dynamodb-replica-data.zip
+      CodeUri: ../../.serverless/dynamodb-stream-sender.zip
 
       VpcConfig:
         SecurityGroupIds:

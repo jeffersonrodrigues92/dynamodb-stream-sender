@@ -18,7 +18,7 @@ pipeline {
         S3_BUCKET_ARTIFACT = "cdt-devops-tools-lambda-functions-artifacts"
         S3_BUCKET_TEMPLATE = "cdt-devops-tools-lambda-functions-template"
         ARCHITETURE = "Serverless"
-        PATH_DEPLOY = "dynamodb-replica-data"
+        PATH_DEPLOY = "dynamodb-stream-sender"
 
 
     }
@@ -161,10 +161,10 @@ pipeline {
         stage('upload cloudformation templates and parameter files') {
             steps {
                 script{
-                    echo "upload template to s3://${env.S3_BUCKET_TEMPLATE}/dynamodb-replica-data/${newVersion}/templates/"
-                    sh "aws s3 cp cloudformation/output/cloudformation.yml s3://${S3_BUCKET_TEMPLATE}/dynamodb-replica-data/${newVersion}/templates/"
-                    echo "upload parameter files to s3://${env.S3_BUCKET_TEMPLATE}/dynamodb-replica-data/${newVersion}/parameters/"
-                    sh "aws s3 sync cloudformation/parameters/ s3://${env.S3_BUCKET_TEMPLATE}/dynamodb-replica-data/${newVersion}/parameters/"
+                    echo "upload template to s3://${env.S3_BUCKET_TEMPLATE}/dynamodb-stream-sender/${newVersion}/templates/"
+                    sh "aws s3 cp cloudformation/output/cloudformation.yml s3://${S3_BUCKET_TEMPLATE}/dynamodb-stream-sender/${newVersion}/templates/"
+                    echo "upload parameter files to s3://${env.S3_BUCKET_TEMPLATE}/dynamodb-stream-sender/${newVersion}/parameters/"
+                    sh "aws s3 sync cloudformation/parameters/ s3://${env.S3_BUCKET_TEMPLATE}/dynamodb-stream-sender/${newVersion}/parameters/"
                 }
             }
         }
@@ -175,7 +175,7 @@ pipeline {
           }
           steps {
             script{
-              echo "deploy stack dynamodb-replica-data ${env.environment} to cloudformation"
+              echo "deploy stack dynamodb-stream-sender ${env.environment} to cloudformation"
                 script {
                     if (BRANCH_NAME.startsWith("develop")) {
                         echo "Iniciando o deploy no ambiente de DEV"
@@ -188,7 +188,7 @@ pipeline {
         stage('Deploy stack DR') {
           steps {
             script{
-              echo "deploy stack dynamodb-replica-data ${env.environment} to cloudformation"
+              echo "deploy stack dynamodb-stream-sender ${env.environment} to cloudformation"
                 script {
                     if (BRANCH_NAME.startsWith("master")) {
                         echo "Iniciando o deploy no ambiente de DR"
@@ -292,7 +292,7 @@ def notifyBuild(String buildStatus = 'STARTED') {
         fields.add(field);
 
         field.put('title', 'Path');
-        field.put('value', 'dynamodb-replica-data');
+        field.put('value', 'dynamodb-stream-sender');
         fields.add(field);
 
         attachment.put('fields',fields);

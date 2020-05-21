@@ -1,5 +1,5 @@
 {
-  "name": "dynamodb-replica-data",
+  "name": "dynamodb-stream-sender",
   "description": "",
   "version": "0.1.0",
   "dependencies": {},

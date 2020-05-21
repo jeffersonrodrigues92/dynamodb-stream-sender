@@ -1,5 +1,5 @@
 
-service: dynamodb-replica-data
+service: dynamodb-stream-sender
 
 plugins:
   - serverless-python-requirements
