@@ -7,12 +7,11 @@ from dto.message_dto import MessageDTO
 from utils.log_util import LogUtil
 from structlog import get_logger
 
-client = boto3.client('sqs')
 log = LogUtil()
 
 class SQSHelper:
 
-    def send_message_batch(self, datas):
+    def send_message_batch(self, datas, client):
         
         queue_url = os.environ['FIFO_QUEUE_NAME']
         
