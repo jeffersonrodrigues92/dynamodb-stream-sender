@@ -31,12 +31,11 @@ class SQSHelper:
                 send_message_batch_request_entries.append(message)
                 log.info(message)
 
-                batchCount+=1
-
                 if batchCount % batchSize == batchEquals:
-                    log.info("enviando mensagens {}".format(send_message_batch_request_entries))
                     client.send_message_batch(QueueUrl=queue_url, Entries=send_message_batch_request_entries)
                     send_message_batch_request_entries = []
+
+                batchCount+=1
 
             except Exception as e:
                 log.error('ERROR processing message: {}'.format(e))
