@@ -47,7 +47,7 @@ class SQSHelper:
                 client.send_message_batch(QueueUrl=queue_url, Entries=send_message_batch_request_entries)
         
         except Exception as e:
-            log.error('ERROR processing message: {} due [{}]'.format(message, e))
+            log.error('ERROR processing message: {}'.format(e))
             pass
 
 
