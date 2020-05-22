@@ -7,4 +7,3 @@ class MessageDTO:
         self.Id = str(uuid.uuid4())
         self.MessageBody = str(message_body)
         self.MessageGroupId = message_group_id
-        self.MessageDeduplicationId = str(uuid.uuid4())
