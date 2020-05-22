@@ -9,6 +9,8 @@ now = datetime.now()
 log = LogUtil()
 sqs_helper = SQSHelper()
 
+
+
 def handler(event, context):
 
     datas = event['Records']

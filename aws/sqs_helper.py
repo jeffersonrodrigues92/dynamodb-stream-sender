@@ -13,7 +13,7 @@ class SQSHelper:
 
     def send_message_batch(self, datas, client):
         
-        queue_url = os.environ['FIFO_QUEUE_URL']
+        queue_url ='https://sqs.us-east-1.amazonaws.com/614858318717/queueReplicaStreamData.fifo'
         
         batchSize = 10
         batchCount = 0
@@ -23,13 +23,13 @@ class SQSHelper:
 
         for data in datas:
             
-            table_name = self.get_table_name(data['eventSourceARN'])
 
             try:
                 
+                table_name = self.get_table_name(data['eventSourceARN'])
                 message = MessageDTO(data, table_name)
 
-                send_message_batch_request_entries.append(data)
+                send_message_batch_request_entries.append(message)
                 log.info(message)
 
                 batchCount+=1
