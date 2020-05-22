@@ -47,3 +47,7 @@ def assume_role(account, role, resource, region):
     log.info('Role Assumed with Succeed')
     
     return client_resource
+
+if __name__ == "__main__":
+    message = {'Records': [{'eventID': 'd0b2051b4b899ef0bca0731c3b96a73c', 'eventName': 'INSERT', 'eventVersion': '1.1', 'eventSource': 'aws:dynamodb', 'awsRegion': 'us-east-1', 'dynamodb': {'ApproximateCreationDateTime': 1590110663.0, 'Keys': {'uuid': {'S': '2'}}, 'NewImage': {'name': {'S': 'teste'}, 'uuid': {'S': '2'}}, 'SequenceNumber': '75941300000000022593736382', 'SizeBytes': 19, 'StreamViewType': 'NEW_AND_OLD_IMAGES'}, 'eventSourceARN': 'arn:aws:dynamodb:us-east-1:614858318717:table/replica-data/stream/2020-05-22T00:15:36.250'}]}
+    handler(message, None)

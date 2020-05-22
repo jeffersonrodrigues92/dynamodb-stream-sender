@@ -27,7 +27,7 @@ class SQSHelper:
 
             try:
                 
-                message = MessageDTO(data, table_name).__dict__
+                message = MessageDTO(data, table_name)
 
                 send_message_batch_request_entries.append(data)
                 log.info(message)
@@ -35,11 +35,12 @@ class SQSHelper:
                 batchCount+=1
 
                 if batchCount % batchSize == batchEquals:
+                    log.info("enviando mensagens {}".format(send_message_batch_request_entries))
                     client.send_message_batch(QueueUrl=queue_url, Entries=send_message_batch_request_entries)
                     send_message_batch_request_entries = []
 
             except Exception as e:
-                log.error('ERROR processing message: {} due [{}]'.format(message, e))
+                log.error('ERROR processing message: {}'.format(e))
                 pass
 
         try:
