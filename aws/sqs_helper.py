@@ -13,7 +13,7 @@ class SQSHelper:
 
     def send_message_batch(self, datas, client):
         
-        queue_url = os.environ['FIFO_QUEUE_NAME']
+        queue_url = os.environ['FIFO_QUEUE_URL']
         
         batchSize = 10
         batchCount = 0
