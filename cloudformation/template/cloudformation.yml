@@ -62,7 +62,7 @@ Resources:
           - !ImportValue vpc-subnetPrvA
       Environment:
         Variables:
-          FIFO_QUEUE_URL: !Join [ ".", [https://sqs, !Ref RegionReplica, amazonaws.com/${AccountReplica}/queueReplicaStreamData.fifo]] 
+          FIFO_QUEUE_URL: !Join ["", ["https://sqs.", !Ref RegionReplica, amazonaws.com/, !Ref AccountReplica, /queueReplicaStreamData.fifo]] 
           REPLICA_REGION: !Ref RegionReplica
           ACCOUNT_REPLICA: !Ref AccountReplica
                     
