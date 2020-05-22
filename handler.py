@@ -17,7 +17,7 @@ def handler(event, context):
 
     try:
         log.info('Sending Message To Queue with: {}'.format(len(datas)))
-        client = assume_role(account_region, 'SenderStreamSQSRole', replica_region, 'sqs')
+        client = assume_role(account_region, 'SenderStreamSQSRole', 'sqs', replica_region)
         sqs_helper.send_message_batch(datas, client)
     except Exception as exception:
         raise exception

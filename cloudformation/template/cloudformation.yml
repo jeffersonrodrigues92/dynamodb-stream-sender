@@ -62,7 +62,7 @@ Resources:
           - !ImportValue vpc-subnetPrvA
       Environment:
         Variables:
-          #FIFO_QUEUE_NAME: !ImportValue queueReplicaData
+          FIFO_QUEUE_NAME: !ImportValue queueReplicaData
           REPLICA_REGION: !Ref RegionReplica
           ACCOUNT_REPLICA: !Ref AccountReplica
                     
