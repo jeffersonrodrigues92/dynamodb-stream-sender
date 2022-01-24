@@ -14,7 +14,7 @@ Veja como atuar em caso a mensagem caia na fila do SQS seguindo as intruções d
 
 O serviço ao todo contempla a seguinte arquitetura abaixo:
 
-![alt text](https://github.com/jeffersonrodrigues92/dynamodb-stream-sender/blob/master/arquitetura.jpg)
+![alt text](https://github.com/jeffersonrodrigues92/dynamodb-stream-sender/blob/master/arquitetura.jpeg)
 
 Esse projeto trabalha com as seguintes tecnologias:
 
