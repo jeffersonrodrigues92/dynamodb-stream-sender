@@ -8,10 +8,6 @@ The service of this repository is responsible for receiving a record from Dynamo
 
 The service only receives the event, identifies and replicates it to the Disaster Recovery environment, if an error occurs at the time of replication, the service manually moves the message to the SQS and we will receive an alert via DataDog in the DR monitoring group.
 
-See how to act in case the message falls into the SQS queue following the instructions in the repository below:
-
-- [DynamoDB Replica Data Resilience](https://github.com/jeffersonrodrigues92/dynamodb-stream-sender-resilience)
-
 The service as a whole includes the following architecture below:
 
 ![alt text](https://github.com/jeffersonrodrigues92/dynamodb-stream-sender/blob/master/arquitetura.jpeg)
