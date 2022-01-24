@@ -5,7 +5,6 @@ import os
 
 from dto.message_dto import MessageDTO
 from utils.log_util import LogUtil
-from structlog import get_logger
 
 log = LogUtil()
 

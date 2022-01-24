@@ -21,7 +21,7 @@
     },
     {
       "ParameterKey": "SecGroup",
-      "ParameterValue": "sg-02754f8f0a861bf1b"
+      "ParameterValue": "sg-xxxxx"
     },
     {
       "ParameterKey": "Env",
@@ -33,6 +33,6 @@
     },
     {
       "ParameterKey": "AccountReplica",
-      "ParameterValue": "162211386566"
+      "ParameterValue": "xxxxxx"
     }
   ]

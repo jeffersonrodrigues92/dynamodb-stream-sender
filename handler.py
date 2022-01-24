@@ -1,7 +1,7 @@
 import boto3
 import os
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from utils.log_util import LogUtil
 from aws.sqs_helper import SQSHelper
 
