@@ -1,34 +1,28 @@
 # DynamoDB DynamoDB Replica Data - Real Time
 
-Esse projeto tem o intuito de replicar dados em tempo real do DynamoDB de Produção para o Ambiente de Disaster Recovery, mantendo a sincronização de dados entre as tabelas em tempo real, vale lembrar que a tabela do ambiente de Produção deve existir também no ambiente de Disaster Recovery.
+This project aims to replicate real-time data from Production DynamoDB to the Disaster Recovery Environment, maintaining data synchronization between tables in real time, it is worth remembering that the Production environment table must also exist in the Disaster environment Recovery.
 
-### Responsabilidades do DynamoDB Replica Data 
+### Responsibilities do DynamoDB Replica Data 
 
-O serviço desse reposositório é responsável por receber a cada mudança de evento um registro do DynamoDB, seja o event `INSERT`, `MODIFY` e `REMOVE`, de forma ordenada gerando um novo registro no Stream associado a tabela.
+The service of this repository is responsible for receiving a record from DynamoDB at each event change, whether the event INSERT, MODIFY and REMOVE, in an orderly manner, generating a new record in the Stream associated with the table.
 
-O serviço apenas recebe o evento, idenfica e replica para o ambiente de Disaster Recovery, caso no momento da replicação aconteça algum erro o serviço move a mensagem manualmente para o SQS e receberemos um alerta via DataDog no grupo de monitoração do DR.
+The service only receives the event, identifies and replicates it to the Disaster Recovery environment, if an error occurs at the time of replication, the service manually moves the message to the SQS and we will receive an alert via DataDog in the DR monitoring group.
 
-Veja como atuar em caso a mensagem caia na fila do SQS seguindo as intruções do repositório abaixo:
+See how to act in case the message falls into the SQS queue following the instructions in the repository below:
 
 - [DynamoDB Replica Data Resilience](https://github.com/jeffersonrodrigues92/dynamodb-stream-sender-resilience)
 
-O serviço ao todo contempla a seguinte arquitetura abaixo:
+The service as a whole includes the following architecture below:
 
 ![alt text](https://github.com/jeffersonrodrigues92/dynamodb-stream-sender/blob/master/arquitetura.jpeg)
 
-Esse projeto trabalha com as seguintes tecnologias:
+This project works with the following technologies:
 
 - [AWS Lambda](https://docs.aws.amazon.com/lambda/)
 - [AWS SQS FIFO](https://docs.aws.amazon.com/sqs/)
 - [AWS DynamoDB](https://docs.aws.amazon.com/dynamodb/)
 - [AWS DynamoDB Strems](https://docs.aws.amazon.com/dynamodb/)
 
-
-### Linguagem de Desenvolvida
+### Language
 
 - Python
-
-
-### Dúvidas? 
-
-Entre em contato com o time de Arquitetura/Cloud
