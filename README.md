@@ -10,11 +10,11 @@ O serviço apenas recebe o evento, idenfica e replica para o ambiente de Disaste
 
 Veja como atuar em caso a mensagem caia na fila do SQS seguindo as intruções do repositório abaixo:
 
-- [DynamoDB Replica Data Resilience](https://github.com/cdt-baas/dynamodb-stream-sender-resilience)
+- [DynamoDB Replica Data Resilience](https://github.com/jeffersonrodrigues92/dynamodb-stream-sender-resilience)
 
 O serviço ao todo contempla a seguinte arquitetura abaixo:
 
-![alt text](https://github.com/cdt-baas/dynamodb-stream-sender/blob/master/arquitetura.jpg)
+![alt text](https://github.com/jeffersonrodrigues92/dynamodb-stream-sender/blob/master/arquitetura.jpg)
 
 Esse projeto trabalha com as seguintes tecnologias:
 
